@@ -1,0 +1,2 @@
+rafael;23543563;ee;ee;ee;ee;3450;Monofásico;;;dddd;21
+rafael;23543563;ff;ff;ff;ff;12;Monofásico;;;21;21

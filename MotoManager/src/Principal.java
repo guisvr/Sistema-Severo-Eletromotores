@@ -9,12 +9,17 @@ import java.io.FileNotFoundException;
 public class Principal {
     public static void main(String[] args) {
 
-        Scanner leitura = new Scanner(System.in);
-
         ArrayList<Cliente> todosClientes = new ArrayList<>();
         ArrayList<Motor> oficina = new ArrayList<>();
+        Scanner leitura = new Scanner(System.in);
 
+        // Identifica o local do projeto para não errar a pasta
+        String diretorioUsuario = System.getProperty("user.dir");
+        System.out.println("Diretório de Trabalho: " + diretorioUsuario);
+
+        // Carregar os dados antes de iniciar o menu
         carregarDados(todosClientes, oficina);
+
         int opcao = -1;
 
         while (opcao != 0) {
@@ -24,240 +29,185 @@ public class Principal {
                 System.out.println("2. Cadastrar Novo Motor");
                 System.out.println("3. Listar Clientes");
                 System.out.println("4. Listar Motores");
-                System.out.println("5. Remover Motor Cadastrado");
+                System.out.println("5. Remover Registro Cadastrado");
                 System.out.println("6. Buscar por Nome de Cliente");
                 System.out.println("7. Buscar Motor por Dados");
-                System.out.println("0. Sair");
+                System.out.println("8. Editar Cliente");
+                System.out.println("0. Sair e Salvar");
 
+                System.out.print("Escolha uma opção: ");
                 opcao = leitura.nextInt();
-                leitura.nextLine();
+                leitura.nextLine(); // Limpar buffer
             } catch (java.util.InputMismatchException e) {
-                System.out.println("ERRO! Digite apenas os números das opções(0 a 7).");
+                System.out.println("ERRO! Digite apenas os números das opções (0 a 8).");
                 leitura.nextLine();
                 opcao = -1;
                 continue;
             }
+
             switch (opcao) {
                 case 1:
-
                     System.out.println("Opção 1: Cadastrar Cliente");
-                    System.out.println("Nome do cliente:");
+                    System.out.print("Nome do cliente: ");
                     String nomeCliente = leitura.nextLine();
-
-                    System.out.println("Telefone: ");
+                    System.out.print("Telefone: ");
                     String telCliente = leitura.nextLine();
 
                     Cliente cliente1 = new Cliente(nomeCliente, telCliente);
                     todosClientes.add(cliente1);
+                    System.out.println("Cliente adicionado à lista temporária.");
                     break;
 
                 case 2:
-
                     if (todosClientes.isEmpty()) {
-                        System.out.println("Erro! Você precisa cadastrar um cliente (opção 1) antes de cadastrar um motor.");
+                        System.out.println("Erro! Você precisa cadastrar um cliente antes.");
                         break;
                     }
 
-                    System.out.println("Tipo do Motor: (1)Monofásico | (2) Trifásico");
+                    System.out.println("Tipo do Motor: (1) Monofásico | (2) Trifásico");
                     int tipoOp = leitura.nextInt();
                     leitura.nextLine();
                     String tipo = (tipoOp == 1) ? "Monofásico" : "Trifásico";
 
-                    String dadosForca = "";
-                    String dadosPartida = "";
-                    String fForca = "";
-                    String fPartida = "";
+                    String dadosForca = "", dadosPartida = "", fForca = "", fPartida = "";
 
                     if (tipo.equals("Monofásico")) {
                         System.out.println("===DADOS MONOFÁSICO===");
-                        System.out.println("Fio da Força: ");
+                        System.out.print("Fio da Força: ");
                         fForca = leitura.nextLine();
-                        System.out.println("Digite as voltas da FORÇA (ex: 80##60##40: ");
+                        System.out.print("Voltas da FORÇA: ");
                         dadosForca = leitura.nextLine();
-                        System.out.println("Fio da Partida: ");
+                        System.out.print("Fio da Partida: ");
                         fPartida = leitura.nextLine();
-                        System.out.println("Digite as voltas da PARTIDA (ex: 80##60##40: ");
+                        System.out.print("Voltas da PARTIDA: ");
                         dadosPartida = leitura.nextLine();
                     } else {
                         System.out.println("===DADOS TRIFÁSICO===");
-                        System.out.println("Digite a quantidade de voltas e o fio (ex: 45 voltas fio 21): ");
+                        System.out.print("Quantidade de voltas e o fio: ");
                         dadosForca = leitura.nextLine();
                         dadosPartida = "N/A";
+                        fForca = "N/A";
+                        fPartida = "N/A";
                     }
 
-                    System.out.println("===Vinculando Motor a um Cliente===");
+                    System.out.println("=== Vincular Motor a um Cliente ===");
                     for (int i = 0; i < todosClientes.size(); i++) {
-                        System.out.println("[" + i + "]" + todosClientes.get(i).getNome());
+                        System.out.println("[" + i + "] " + todosClientes.get(i).getNome());
                     }
 
                     int indice = -1;
                     boolean indiceValido = false;
-
                     while (!indiceValido) {
                         indice = lerNumeroSeguro(leitura, "Digite o número do cliente: ");
-
                         if (indice >= 0 && indice < todosClientes.size()) {
                             indiceValido = true;
                         } else {
-                            System.out.println("Esse cliente não existe. escolha um número entre 0 e " + (todosClientes.size() - 1));
+                            System.out.println("Número inválido.");
                         }
                     }
 
                     Cliente clienteSelecionado = todosClientes.get(indice);
 
-                    System.out.println("Cadastrar Motor");
-                    System.out.println("Marca: ");
+                    System.out.print("Marca: ");
                     String marcaMotor = leitura.nextLine();
-
-                    System.out.println("Modelo: ");
+                    System.out.print("Modelo: ");
                     String modeloMotor = leitura.nextLine();
-
-                    System.out.println("Potência: ");
+                    System.out.print("Potência: ");
                     String potenciaMotor = leitura.nextLine();
-
-                    System.out.println("Voltagem: ");
+                    System.out.print("Voltagem: ");
                     String voltagemMotor = leitura.nextLine();
-
                     int rpmMotor = lerNumeroSeguro(leitura, "Rpm: ");
-                    leitura.nextLine();
 
                     Motor novoMotor = new Motor(clienteSelecionado, marcaMotor, modeloMotor, potenciaMotor, voltagemMotor, rpmMotor, tipo, dadosForca, dadosPartida, fForca, fPartida);
                     oficina.add(novoMotor);
-                    salvarDados(oficina);
-                    System.out.println("Motor Cadastrado para " + clienteSelecionado.getNome());
+                    salvarDados(oficina); // Salva logo após cadastrar
+                    System.out.println("Motor Cadastrado e Salvo!");
                     break;
 
                 case 3:
-
-                    System.out.println("===CLIENTES CADASTRADOS===");
-                    if (todosClientes.isEmpty()) {
-                        System.out.println("Sem clientes Cadastrados.");
-                    } else {
-                        for (Cliente c : todosClientes) {
-                            System.out.println("Nome: " + c.getNome() + "| Telefone: " + c.getTelefone());
-                        }
-                    }
+                    System.out.println("=== CLIENTES NA MEMÓRIA ===");
+                    if (todosClientes.isEmpty()) System.out.println("Vazio.");
+                    else for (Cliente c : todosClientes) System.out.println(c.getNome() + " - " + c.getTelefone());
                     break;
 
                 case 4:
-
-                    System.out.println("===MOTORES CADASTRADOS===");
-                    if (oficina.isEmpty()) {
-                        System.out.println("Sem Motores Cadastrados");
-                    } else {
-                        for (Motor m : oficina) {
-                            m.exibirInformacoes();
-                        }
-                    }
+                    System.out.println("=== MOTORES NA OFICINA ===");
+                    if (oficina.isEmpty()) System.out.println("Vazio.");
+                    else for (Motor m : oficina) m.exibirInformacoes();
                     break;
 
                 case 5:
-
-                    System.out.println("===REMOVER MOTOR===");
+                    System.out.println("=== REMOVER REGISTRO ===");
                     if (oficina.isEmpty()) {
-                        System.out.println("Não há motores na oficina.");
+                        System.out.println("Não há registros.");
                     } else {
                         for (int i = 0; i < oficina.size(); i++) {
-                            System.out.println("[" + i + "]" + oficina.get(i).getModelo() + " - Cliente: " + oficina.get(i).getProprietario().getNome());
+                            System.out.println("[" + i + "] " + oficina.get(i).getProprietario().getNome() + " | " + oficina.get(i).getModelo());
                         }
-                        int idRemover = -1;
-                        boolean idRemoverValido = false;
-
-                        while (!idRemoverValido) {
-                            idRemover = lerNumeroSeguro(leitura, "Digite o número do motor para remover: ");
-
-                            if (idRemover >= 0 && idRemover < oficina.size()) {
-                                idRemoverValido = true;
-                            } else {
-                                System.out.println("Esse motor não existe. Escolha um número entre 0 e " + (oficina.size() - 1));
-                            }
+                        int index = lerNumeroSeguro(leitura, "Índice para remover: ");
+                        if (index >= 0 && index < oficina.size()) {
+                            oficina.remove(index);
+                            salvarDados(oficina);
+                            System.out.println("Removido!");
                         }
-                        Motor removido = oficina.remove(idRemover);
+                    }
+                    break;
+
+                case 8:
+                    System.out.println("=== EDITAR CLIENTE ===");
+                    if (oficina.isEmpty()) {
+                        System.out.println("Nada para editar.");
+                        break;
+                    }
+                    for (int i = 0; i < oficina.size(); i++) {
+                        System.out.println("[" + i + "] " + oficina.get(i).getProprietario().getNome());
+                    }
+                    int idEdit = lerNumeroSeguro(leitura, "Índice: ");
+                    if (idEdit >= 0 && idEdit < oficina.size()) {
+                        Motor m = oficina.get(idEdit);
+                        System.out.print("Novo Nome: ");
+                        m.getProprietario().setNome(leitura.nextLine());
+                        System.out.print("Novo Telefone: ");
+                        m.getProprietario().setTelefone(leitura.nextLine());
                         salvarDados(oficina);
-                        System.out.println("Motor removido com sucesso!");
+                        System.out.println("Editado!");
                     }
                     break;
-
-                case 6:
-
-                    System.out.println("Digite o nome do cliente para buscar: ");
-                    String nomeBusca = leitura.nextLine();
-                    boolean encontrado = false;
-
-                    System.out.println("===RESULTADOS DA BUSCA===");
-                    for (Motor m : oficina) {
-                        if (m.getProprietario().getNome().equalsIgnoreCase(nomeBusca)) {
-                            m.exibirInformacoes();
-                            encontrado = true;
-                        }
-                    }
-                    if (!encontrado) {
-                        System.out.println("Nenhum motor encontrado para o cliente: " + nomeBusca);
-                    }
-                    break;
-
-                case 7:
-
-                    System.out.println("===BUSCA MOTOR POR DADOS===");
-                    System.out.println("Preencha os dados para filtrar(ou aperte ENTER para ignorar algum campo.");
-
-                    System.out.println("Marca: ");
-                    String fMarca = leitura.nextLine();
-
-                    System.out.println("Modelo: ");
-                    String fModelo = leitura.nextLine();
-
-                    System.out.println("Potencia: ");
-                    String fPotencia = leitura.nextLine();
-
-                    System.out.println("Voltagem: ");
-                    String fVoltagem = leitura.nextLine();
-
-                    System.out.println("RPM: ");
-                    String fRpmStr = leitura.nextLine();
-
-                    System.out.println("===RESULTADOS DA BUSCA===");
-                    boolean algumEncontrado = false;
-
-                    for (Motor m : oficina) {
-
-                        boolean bateMarca = fMarca.isEmpty() || m.getMarca().equalsIgnoreCase(fMarca);
-                        boolean bateModelo = fModelo.isEmpty() || m.getModelo().equalsIgnoreCase(fModelo);
-                        boolean batePotencia = fPotencia.isEmpty() || m.getPotencia().equalsIgnoreCase(fPotencia);
-                        boolean bateVoltagem = fVoltagem.isEmpty() || m.getVoltagem().equalsIgnoreCase(fVoltagem);
-                        boolean bateRpm = fRpmStr.isEmpty() || String.valueOf(m.getRpm()).equalsIgnoreCase(fRpmStr);
-
-                        if (bateMarca && bateModelo && batePotencia && bateVoltagem && bateRpm) {
-                            m.exibirInformacoes();
-                            algumEncontrado = true;
-                        }
-                    }
-                    if (!algumEncontrado) {
-                        System.out.println("Nenhum motor correspondente aos dados informados.");
-                    }
-                    break;
-
 
                 case 0:
-
-                    System.out.println("Encerrando Sistema.");
-                    break;
+                    System.out.println("Salvando dados finais e saindo...");
+                    salvarDados(oficina);
+                    return;
 
                 default:
-                    System.out.println("Opção Inválida. Tente novamente.");
+                    System.out.println("Opção inválida.");
                     break;
             }
         }
     }
 
-    public static void salvarDados(ArrayList<Motor> motores) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("oficina.txt"))) {
-            for (Motor m : motores) {
-                writer.println(m.getProprietario().getNome() + ";" + m.getProprietario().getTelefone() + ";" + m.getMarca() + ";" + m.getModelo() + ";" + m.getPotencia() + ";" + m.getVoltagem() + ";" + m.getRpm() + ";" + m.getTipo() + ";" + m.getEsquemaForca() + ";" + m.getEsquemaPartida() + ";" + m.getFioForca() + ";" + m.getFioPartida());
+    public static void salvarDados(ArrayList<Motor> lista) {
+        // Tenta salvar tanto na raiz quanto dentro de MotoManager para garantir
+        try (PrintWriter writer = new PrintWriter(new FileWriter("oficina.txt", false))) {
+            for (Motor m : lista) {
+                writer.println(
+                        m.getProprietario().getNome() + ";" +       // 0
+                                m.getProprietario().getTelefone() + ";" +   // 1
+                                m.getMarca() + ";" +                        // 2
+                                m.getModelo() + ";" +                       // 3
+                                m.getPotencia() + ";" +                     // 4
+                                m.getVoltagem() + ";" +                     // 5
+                                m.getRpm() + ";" +                          // 6
+                                m.getTipo() + ";" +                         // 7
+                                m.getEsquemaForca() + ";" +                 // 8
+                                m.getEsquemaPartida() + ";" +               // 9
+                                m.getFioForca() + ";" +                     // 10
+                                m.getFioPartida()                           // 11
+                );
             }
-            System.out.println("Dados salvos no arquivo 'oficina.txt'!");
+            writer.flush();
         } catch (IOException e) {
-            System.out.println("Erro ao salvar o arquivo: " + e.getMessage());
+            System.out.println("Erro ao salvar: " + e.getMessage());
         }
     }
 
@@ -265,34 +215,41 @@ public class Principal {
         File arquivo = new File("oficina.txt");
         if (!arquivo.exists()) return;
 
-        try (Scanner leitorArquivo = new Scanner(arquivo)) {
-            while (leitorArquivo.hasNextLine()) {
-                String linha = leitorArquivo.nextLine().trim();
+        try (Scanner leitor = new Scanner(arquivo)) {
+            while (leitor.hasNextLine()) {
+                String linha = leitor.nextLine().trim();
                 if (linha.isEmpty()) continue;
-                String[] partes = linha.split(";");
+                String[] p = linha.split(";");
 
-                if (partes.length == 12) {
-                    Cliente c = new Cliente(partes[0], partes[1]);
-                    clientes.add(c);
+                if (p.length == 12) {
+                    Cliente c = new Cliente(p[0], p[1]);
+                    // Adicionamos o cliente na lista de clientes se ele não estiver lá
+                    boolean jaExiste = false;
+                    for (Cliente existente : clientes) {
+                        if (existente.getNome().equals(c.getNome())) jaExiste = true;
+                    }
+                    if (!jaExiste) clientes.add(c);
 
-                    Motor m = new Motor(c, partes[2], partes[3], partes[4], partes[5], Integer.parseInt(partes[6]), partes[7], partes[8], partes[9], partes[10], partes[11]);
+                    Motor m = new Motor(c, p[2], p[3], p[4], p[5],
+                            Integer.parseInt(p[6].trim()), p[7], p[8],
+                            p[9], p[10], p[11]);
                     motores.add(m);
                 }
             }
-            System.out.println(motores.size() + " registros carregados com sucesso!");
-        } catch (FileNotFoundException e) {
-            System.out.println("Arquivo não encontrado.");
+            System.out.println(motores.size() + " motores carregados!");
+        } catch (Exception e) {
+            System.out.println("Erro ao carregar: Arquivo pode estar corrompido.");
         }
     }
 
     public static int lerNumeroSeguro(Scanner leitura, String mensagem) {
         while (true) {
             try {
-                System.out.println(mensagem);
+                System.out.print(mensagem);
                 int num = leitura.nextInt();
                 leitura.nextLine();
                 return num;
-            } catch (java.util.InputMismatchException e) {
+            } catch (Exception e) {
                 System.out.println("Digite um número válido!");
                 leitura.nextLine();
             }

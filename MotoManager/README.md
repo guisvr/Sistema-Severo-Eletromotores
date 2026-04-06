@@ -1,35 +1,50 @@
-# ⚡ Sistema Severo Eletromotores
+#  Sistema Severo Eletromotores
 
-Este é um sistema de gerenciamento técnico e administrativo desenvolvido para a **Severo Eletromotores**, minha empresa especializada em manutenção e rebobinamento de motores elétricos.
+##  About the Project
 
-O software foi criado para resolver uma dor real do dia a dia: a organização de dados técnicos de rebobinamento (esquemas de força e partida, bitolas de fios e voltas) que antes eram registrados apenas em papel.
+This project is a Java-based console application developed to support the management of a maintenance business.
+It allows the registration and organization of clients and electric motors, simulating real-world operational workflows.
 
-##  Funcionalidades
+##  Features
 
-- **Cadastro de Clientes e Motores:** Vinculação direta entre o proprietário e o equipamento.
-- **Banco de Dados Técnico:** Suporte para motores **Monofásicos** e **Trifásicos**.
-- **Visualização de Arcos:** Lógica de exibição que simula o esquema de grupos de bobinas para facilitar o trabalho na bancada.
-- **Persistência de Dados:** Salvamento e carregamento automático via arquivo de texto (`.txt`), garantindo que os dados não se percam ao fechar o programa.
-- **Blindagem de Dados:** Tratamento de exceções (try-catch) para evitar que o programa feche por erros de digitação.
-- **Busca Avançada:** Filtros por marca, modelo, potência e RPM para consulta rápida de dados de rebobinamento.
+* Client registration and management
+* Motor registration with detailed technical data
+* Association between clients and their motors
+* Listing of registered clients and motors
+* Search functionality (clients and motors)
+* Record removal and client data editing
+* Data persistence using file storage (.txt)
+* Automatic data loading on system startup
 
-##  Tecnologias Utilizadas
+##  Technologies Used
 
-- **Java 17+**: Linguagem principal utilizada para a lógica de objetos.
-- **Manipulação de Arquivos (IO)**: Para armazenamento persistente de dados.
-- **Scanner & Exception Handling**: Para uma interface de console segura e robusta.
+* Java
+* Object-Oriented Programming (OOP)
+* File handling (FileWriter, Scanner)
+* Collections (ArrayList)
 
-##  Como o Sistema Funciona (Lógica Técnica)
+##  How It Works
 
-O sistema diferencia a entrada de dados conforme o tipo de motor:
-- **Motores Monofásicos:** Solicita bitola e voltas para os grupos de **Força** e **Partida**.
-- **Motores Trifásicos:** Foca no esquema de ligação e dados de fio único/duplo conforme a necessidade.
+The system runs in the console and provides a menu-based interface where the user can manage clients and motors.
+All data is stored in a `.txt` file, ensuring that information is preserved between executions.
 
-Os dados são estruturados em um padrão de 12 colunas separado por `;` (ponto e vírgula), permitindo uma leitura rápida e eficiente pelo código.
+##  Purpose
 
-##  Como Executar
+This project was developed to apply programming concepts in a real-world scenario, focusing on:
 
-1. Certifique-se de ter o JDK instalado em sua máquina.
-2. Clone o repositório:
-   ```bash
-   git clone [https://github.com/SEU_USUARIO/Sistema-Severo-Eletromotores.git](https://github.com/SEU_USUARIO/Sistema-Severo-Eletromotores.git)
+* Business logic implementation
+* Data organization
+* Persistence without a database
+* System structuring using OOP principles
+
+##  Future Improvements
+
+* Database integration (e.g., MySQL)
+* Graphical User Interface (GUI)
+* Improved validation and error handling
+* Advanced search and filtering features
+
+##  Author
+
+Developed by Guilherme Severo
+GitHub: https://github.com/guisvr
